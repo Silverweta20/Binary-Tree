@@ -6,6 +6,7 @@
 #define TREE_H
 #include "Node.h"
 #include <iostream>
+#include <vector>
 using namespace std;
 
 
@@ -226,7 +227,27 @@ unsigned int Tree<T>::wide() {
 template <class T>
 unsigned int Tree<T>::wide(Node<T>* node) {
     unsigned int maxWide = 0;
+    if (node == nullptr) return 0;
 
+    list<Node<T>*> queue;
+    queue.push_back(node);
+    while (!queue.empty()) {
+        list<Node<T>*> aux;
+        if (maxWide < queue.size()) {
+            maxWide = queue.size();
+        }
+        while (!queue.empty()) {
+            Node<T>* actual = queue.front();
+            queue.pop_front();
+            if (!actual->isLeftEmpty()) {
+                aux.push_back(actual->getLeftNode());
+            }
+            if (!actual->isRightEmpty()) {
+                aux.push_back(actual->getRightNode());
+            }
+        }
+        queue = aux;
+    }
     return maxWide;
 }
 template <class T>
